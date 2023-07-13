@@ -8,7 +8,7 @@ const Blog = require("../models/blog");
 beforeEach(async () => {
   await Blog.deleteMany({});
   await Blog.insertMany(helper.initialBlogs);
-});
+}, 100000);
 
 describe("when there are initially saved blogs", () => {
   test("blogs are returned as json", async () => {
