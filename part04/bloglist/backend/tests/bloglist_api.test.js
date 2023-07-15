@@ -10,7 +10,7 @@ beforeEach(async () => {
   await Blog.insertMany(helper.initialBlogs);
 }, 100000);
 
-describe("when there are initially saved blogs", () => {
+describe("when there is initially some blogs saved", () => {
   test("blogs are returned as json", async () => {
     await api
       .get("/api/blogs")
@@ -18,10 +18,14 @@ describe("when there are initially saved blogs", () => {
       .expect("Content-Type", /application\/json/);
   }, 10000);
 
-  test("there are five blogs", async () => {
-    const res = await api.get("/api/blogs");
+  test("blogs have id property named id instead of _id", async () => {
+    const response = await api.get("/api/blogs");
 
-    expect(res.body).toHaveLength(6);
+    const ids = response.body.map((blog) => blog.id);
+
+    for (const id of ids) {
+      expect(id).toBeDefined();
+    }
   }, 10000);
 });
 
