@@ -5,34 +5,50 @@ const dummy = (blogs) => {
 };
 
 const totalLikes = (blogs) => {
-  const total = blogs.reduce((acc, blog) => {
-    return acc + blog.likes;
-  }, 0);
+  const likes = blogs.length === 0 ? 0 : blogs.reduce((a, b) => a + b.likes, 0);
 
-  return total;
+  return likes;
 };
 
 const favoriteBlog = (blogs) => {
-  const favorite = blogs.sort((a, b) => b.likes - a.likes)[0];
+  const blog = blogs.reduce((a, b) => (a.likes > b.likes ? a : b), {});
 
   return {
-    title: favorite.title,
-    author: favorite.author,
-    likes: favorite.likes,
+    title: blog.title,
+    author: blog.author,
+    likes: blog.likes,
   };
 };
 
 const mostBlogs = (blogs) => {
-  const authorCount = lodash.countBy(blogs, "author");
+  const groupedAuthors = lodash.groupBy(blogs, "author");
+  let authorsArray = [];
+  for (const author in groupedAuthors) {
+    const obj = { [author]: groupedAuthors[author] };
+    authorsArray.push(obj);
+  }
 
-  const mostAuthor = Object.keys(authorCount).reduce((a, b) =>
-    authorCount[a] > authorCount[b] ? a : b
+  const filteredAuthor = authorsArray.reduce(
+    (a, b) => (a.length > b.length ? a : b),
+    {}
   );
 
   return {
-    author: mostAuthor,
-    blogs: authorCount[mostAuthor],
+    author: Object.keys(filteredAuthor)[0],
+    blogs: filteredAuthor[Object.keys(filteredAuthor)].length,
   };
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+const mostLikes = (blogs) => {
+  const groupedAuthors = lodash.groupBy(blogs, "author");
+  let info = [];
+  for (const author in groupedAuthors) {
+    const likes = groupedAuthors[author].reduce((a, b) => (a += b.likes), 0);
+    info.push({ author: author, likes: likes });
+  }
+  const most = info.reduce((a, b) => (a.likes > b.likes ? a : b), {});
+  console.log(most);
+  return most;
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };
