@@ -154,8 +154,8 @@ describe("most", () => {
     const result = listHelper.mostBlogs(blogs);
 
     expect(result).toEqual({
-      author: "Edsger W. Dijkstra",
-      blogs: 2,
+      author: "Robert C. Martin",
+      blogs: 3,
     });
   });
 
