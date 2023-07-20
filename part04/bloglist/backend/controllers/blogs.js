@@ -17,24 +17,10 @@ blogsRouter.get("/:id", async (req, res, next) => {
   }
 });
 
-const getTokenFrom = (req) => {
-  const authorization = req.get("authorization");
-  if (authorization && authorization.startsWith("Bearer ")) {
-    return authorization.replace("Bearer ", "");
-  }
-  return null;
-};
-
 blogsRouter.post("/", async (req, res) => {
   const { title, author, url, likes } = req.body;
 
-  const decodedToken = jwt.verify(req.token, process.env.SECRET);
-
-  if (!decodedToken.id) {
-    return res.status(401).json({ error: "token invalid" });
-  }
-
-  const user = await User.findById(decodedToken.id);
+  const user = req.user;
 
   const blog = new Blog({
     title: title,
