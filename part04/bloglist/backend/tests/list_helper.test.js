@@ -2,12 +2,13 @@ const listHelper = require("../utils/list_helper");
 
 test("dummy returns one", () => {
   const blogs = [];
+
   const result = listHelper.dummy(blogs);
   expect(result).toBe(1);
 });
 
 describe("total likes", () => {
-  const emptyList = [];
+  const listWithZeroBlog = [];
 
   const listWithOneBlog = [
     {
@@ -20,7 +21,7 @@ describe("total likes", () => {
     },
   ];
 
-  const biggerList = [
+  const listWithManyBlogs = [
     {
       _id: "5a422a851b54a676234d17f7",
       title: "React patterns",
@@ -72,20 +73,17 @@ describe("total likes", () => {
   ];
 
   test("of empty list is zero", () => {
-    const result = listHelper.totalLikes(emptyList);
-
+    const result = listHelper.totalLikes(listWithZeroBlog);
     expect(result).toBe(0);
   });
 
-  test("when list has only one blog equals the likes of that", () => {
+  test("when list has only one blog, equals to the likes of that", () => {
     const result = listHelper.totalLikes(listWithOneBlog);
-
     expect(result).toBe(5);
   });
 
-  test("of a bigger blog list is calculated right", () => {
-    const result = listHelper.totalLikes(biggerList);
-
+  test("of a bigger list is calculated right", () => {
+    const result = listHelper.totalLikes(listWithManyBlogs);
     expect(result).toBe(36);
   });
 });
@@ -142,7 +140,7 @@ describe("most", () => {
     },
   ];
 
-  test("likes", () => {
+  test("likes in a single blog", () => {
     const result = listHelper.favoriteBlog(blogs);
 
     expect(result).toEqual({
@@ -158,6 +156,15 @@ describe("most", () => {
     expect(result).toEqual({
       author: "Robert C. Martin",
       blogs: 3,
+    });
+  });
+
+  test("likes for an author", () => {
+    const result = listHelper.mostLikes(blogs);
+
+    expect(result).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 17,
     });
   });
 });
